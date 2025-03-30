@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -78,6 +79,35 @@ public class UserController {
     @PatchMapping("/update-avatar")
     public Result updateAvatar(@RequestParam @URL @NotEmpty String avatarUrl){
         userService.updateAvatar(avatarUrl);
+        return Result.success();
+    }
+
+    @PatchMapping("/update-pwd")
+    public Result updatePwd(@RequestBody Map<String, String> params){
+        // Validate params
+        String oldPwd = params.get("old_pwd");
+        String newPwd = params.get("new_pwd");
+        String rePwd = params.get("re_pwd");
+
+        if(!StringUtils.hasLength(oldPwd) || !StringUtils.hasLength(newPwd) || !StringUtils.hasLength(rePwd) || !StringUtils.hasLength(oldPwd)){
+            return Result.error("Missing required params");
+        }
+
+        // Check if old password is correct
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        String username = (String) claims.get("username");
+        User user = userService.findByUsername(username);
+        if (!user.getPassword().equals(Md5Util.getMD5String(oldPwd))){
+            return Result.error("Wrong old password");
+        }
+
+        // Check if rePwd == newPwd
+        if (!rePwd.equals(newPwd)){
+            return Result.error("Passwords do not match");
+        }
+
+        // Update password
+        userService.updatePwd(newPwd);
         return Result.success();
     }
 }
