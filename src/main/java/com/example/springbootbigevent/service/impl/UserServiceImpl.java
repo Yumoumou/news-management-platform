@@ -26,4 +26,5 @@ public class UserServiceImpl implements UserService {
         // Register
         userMapper.add(username, encryptedPwd);
     }
+
 }
