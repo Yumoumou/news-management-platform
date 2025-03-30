@@ -7,7 +7,9 @@ import com.example.springbootbigevent.service.UserService;
 import com.example.springbootbigevent.utils.JwtUtil;
 import com.example.springbootbigevent.utils.Md5Util;
 import com.example.springbootbigevent.utils.ThreadLocalUtil;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -70,6 +72,12 @@ public class UserController {
     @PutMapping("/update")
     public Result updateUserInfo(@RequestBody @Validated User user){
         userService.updateUserInfo(user);
+        return Result.success();
+    }
+
+    @PatchMapping("/update-avatar")
+    public Result updateAvatar(@RequestParam @URL @NotEmpty String avatarUrl){
+        userService.updateAvatar(avatarUrl);
         return Result.success();
     }
 }
