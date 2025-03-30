@@ -6,12 +6,11 @@ import com.example.springbootbigevent.pojo.User;
 import com.example.springbootbigevent.service.UserService;
 import com.example.springbootbigevent.utils.JwtUtil;
 import com.example.springbootbigevent.utils.Md5Util;
+import com.example.springbootbigevent.utils.ThreadLocalUtil;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,5 +57,19 @@ public class UserController {
 
         // Wrong password
         return Result.error("Wrong password");
+    }
+
+    @GetMapping("/userinfo")
+    public Result<User> userInfo() {
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        String username = (String) claims.get("username");
+        User user = userService.findByUsername(username);
+        return Result.success(user);
+    }
+
+    @PutMapping("/update")
+    public Result updateUserInfo(@RequestBody @Validated User user){
+        userService.updateUserInfo(user);
+        return Result.success();
     }
 }

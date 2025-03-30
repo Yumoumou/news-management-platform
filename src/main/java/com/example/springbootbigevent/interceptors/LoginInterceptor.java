@@ -2,6 +2,7 @@ package com.example.springbootbigevent.interceptors;
 
 import com.example.springbootbigevent.pojo.Result;
 import com.example.springbootbigevent.utils.JwtUtil;
+import com.example.springbootbigevent.utils.ThreadLocalUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
@@ -20,11 +21,19 @@ public class LoginInterceptor implements HandlerInterceptor {
         try {
             // User already login
             Map<String, Object> claims = JwtUtil.parseToken(token);
+            // Store claims in threadlocal
+            ThreadLocalUtil.set(claims);
             return true;
         } catch (Exception e) {
             // User didn't login
             response.setStatus(401);
             return false;
         }
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        // Avoid memory leak
+        ThreadLocalUtil.remove();
     }
 }

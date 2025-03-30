@@ -7,6 +7,8 @@ import com.example.springbootbigevent.utils.Md5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -25,6 +27,12 @@ public class UserServiceImpl implements UserService {
 
         // Register
         userMapper.add(username, encryptedPwd);
+    }
+
+    @Override
+    public void updateUserInfo(User user) {
+        user.setUpdateTime(LocalDateTime.now());
+        userMapper.updateUserInfo(user);
     }
 
 }
