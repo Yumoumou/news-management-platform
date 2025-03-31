@@ -4,6 +4,7 @@ import com.example.springbootbigevent.pojo.Category;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -18,4 +19,10 @@ public interface CategoryMapper {
 
     @Select("select * from category where create_user=#{id}")
     List<Category> getCategoryList(Integer id);
+
+    @Select("select * from category where id=#{categoryId} AND create_user=#{userId}")
+    Category findCategoryById(Integer categoryId, Integer userId);
+
+    @Update("update category set category_name=#{categoryName}, category_alias=#{categoryAlias}, update_time=now() where id=#{id}")
+    void updateCategory(Category category);
 }

@@ -41,4 +41,17 @@ public class CategoryServiceImpl implements CategoryService {
         List categoryList = categoryMapper.getCategoryList(id);
         return categoryList;
     }
+
+    @Override
+    public Category findCategoryById(Integer categoryId) {
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        Integer userId = (Integer) claims.get("id");
+        Category category = categoryMapper.findCategoryById(categoryId, userId);
+        return category;
+    }
+
+    @Override
+    public void updateCategory(Category category) {
+        categoryMapper.updateCategory(category);
+    }
 }
