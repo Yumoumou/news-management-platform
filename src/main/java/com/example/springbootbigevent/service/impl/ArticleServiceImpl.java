@@ -21,4 +21,14 @@ public class ArticleServiceImpl implements ArticleService {
         article.setCreateUser(userId);
         articleMapper.addArticle(article);
     }
+
+    @Override
+    public void updateArticle(Article article) {
+        articleMapper.updateArticle(article);
+    }
+
+    @Override
+    public void deleteArticle(Integer id) {
+        articleMapper.deleteArticle(id);
+    }
 }
