@@ -1,10 +1,7 @@
 package com.example.springbootbigevent.mapper;
 
 import com.example.springbootbigevent.pojo.Category;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -25,4 +22,7 @@ public interface CategoryMapper {
 
     @Update("update category set category_name=#{categoryName}, category_alias=#{categoryAlias}, update_time=now() where id=#{id}")
     void updateCategory(Category category);
+
+    @Delete("delete from category where id=#{categoryId}")
+    void deleteCategory(Integer categoryId);
 }

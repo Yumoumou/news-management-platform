@@ -58,4 +58,16 @@ public class CategoryController {
         categoryService.updateCategory(category);
         return Result.success();
     }
+
+    @DeleteMapping
+    public Result deleteCategory(Integer id, HttpServletResponse response) {
+        // Check if category is created by user
+        Category oldCategory = categoryService.findCategoryById(id);
+        if (oldCategory == null) {
+            response.setStatus(404);
+            return Result.error("Category not found");
+        }
+        categoryService.deleteCategory(id);
+        return Result.success();
+    }
 }
